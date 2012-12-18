@@ -1,0 +1,4 @@
+SECRET_KEY='itsasecret
+
+DEBUG = True
+DATABASE = 'facturas'
