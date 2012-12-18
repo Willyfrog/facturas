@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block body %}
+{% if session.logged_in %}
+<form action="{{ url_for('crear_factura') }}" method=post class=add-entry>
+  <dl>
+    <dt>Factura #:
+      <dd><input type=text size=30 name=num value={{fnum}}>
+        <dt>Fecha:
+          <dd><input name=fecha size=20>
+            <dt>Importe:
+              <dd><input name=importe size=30>€
+              <dd><input type=submit value=Share>
+  </dl>
+</form>
+{% else %}
+<h2>Login</h2>
+  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+  <form action="{{ url_for('login') }}" method=post>
+    <dl>
+      <dt>Usuario:
+      <dd><input type=text name=username>
+      <dt>Password:
+      <dd><input type=password name=password>
+      <dd><input type=submit value=Login>
+    </dl>
+  </form>
+{% endif %}
+{% endblock %}

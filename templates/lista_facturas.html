@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block body %}
+<ul class=entries>
+  {% for entry in facturas %}
+    <li><h2>{{ entry._id }}</h2>{{ entry.fecha }} - {{ entry.importe }}
+  {% else %}
+    <li><em>No he visto ni una sola factura por aqui</em>
+  {% endfor %}
+  </ul>
+{% endblock %}
