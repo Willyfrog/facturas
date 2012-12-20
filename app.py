@@ -34,12 +34,15 @@ def valid_login(username, password):
     print('Alive: %s' %g.conn.alive())
     for u in g.db.users.find():
         print "%r" % u
-    cur = g.db.users.find({'user':request.form['username'].encode("utf-8")}).limit(1)
-    if cur!=1:
+    print "buscamos %s" % request.form['username']
+    #cur = g.db.users.find({'user':request.form['username']})
+    cur = g.db.users.find({'user':request.form['username']})
+    u = cur.next()
+    if u is not None:
         print "ups, ninguno"
         return False
-    user = cur[0]
-    return check_pass(password, user['pass'])
+    print u
+    return check_pass(password, u['pass'])
 
 @app.route('/login', methods=['POST'])
 def login():

@@ -2,8 +2,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Facturas de Sara</title>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
+<script>window.jQuery || document.write('<script src="{{
+  url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
 <div class=page>
-  <h1>Flaskr</h1>
+  <h1>Facturas</h1>
   <div class=metanav>
   {% if not session.logged_in %}
     <a href="{{ url_for('login') }}">Inicia sesion</a>
