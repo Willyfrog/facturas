@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template, redirect, flash, g, session, request, url_for
+from flask import Flask, render_template, redirect, flash, g, session, request, url_for, abort
 from datetime import datetime
 import pymongo
 
@@ -27,6 +27,7 @@ def check_pass(txt_pass, enc_pass):
     # TODO encriptar pass
     #algo, salt, hsh = enc_pass.split('$')
     #return hsh == get_hexdigest(algo, salt, txt_pass)
+    print "%s==%s?%s" % (txt_pass, enc_pass, txt_pass == enc_pass)
     return txt_pass == enc_pass
 
 def valid_login(username, password):
@@ -34,14 +35,12 @@ def valid_login(username, password):
     print('Alive: %s' %g.conn.alive())
     for u in g.db.users.find():
         print "%r" % u
-    print "buscamos %s" % request.form['username']
-    #cur = g.db.users.find({'user':request.form['username']})
-    cur = g.db.users.find({'user':request.form['username']})
-    u = cur.next()
-    if u is not None:
-        print "ups, ninguno"
+
+    u = g.db.users.find_one({'user': username})
+    if u is None:
+        print "no tenemos ese usuario"
         return False
-    print u
+
     return check_pass(password, u['pass'])
 
 @app.route('/login', methods=['POST'])
@@ -63,17 +62,19 @@ def logout():
 
 
 def get_last_num():
-    cur = g.db.facturas.find().sort(('_id',pymongo.ASCENDING)).limit(1)
-    if len(cur) == 0:
+    cur = g.db.facturas.find().sort('_id',pymongo.ASCENDING).limit(1)
+    if cur.count() == 0:
         return 1
     return cur[0]['_id']
 
 @app.route("/")
 def index():
     fnum = 0
-    if getattr(session, "logged_in", False)==True:
+    if session.get("logged_in", False)==True:
         fnum = get_last_num()
-    return render_template('index.html', fnum=fnum)
+        return render_template('index.html', fnum=fnum)
+    else:
+        return render_template('login.html')
 
 @app.route("/f/crear", methods=["POST"])
 def crear_factura():
