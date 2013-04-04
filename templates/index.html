@@ -1,16 +1,28 @@
 {% extends "layout.html" %}
 {% block body %}
-<form action="{{ url_for('crear_factura') }}" method=post class=add-entry>
-  <dl>
-    <dt>Factura #:
-      <dd><input type=text size=30 name=num value={{fnum}}>
-        <dt>Fecha:
-          <dd><input name=fecha size=20>
-            <dt>Importe:
-              <dd><input name=importe size=30>€
-              <dd><input type=submit value=Share>
-  </dl>
+<form action="{{ url_for('crear_factura') }}" method=post class="form-horizontal form-factura">
+  <div class="control-group">
+    <label class="control-label" for="num">Factura #</label>
+    <div class="controls">
+      <input type="text" id="num" value="{{fnum}}" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="fecha">Fecha</label>
+    <div class="controls">
+      <input type="text" id="fecha" value="{{fdate}}"/>
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="importe">Importe</label>
+    <div class="controls">
+      <input type="text" id="importe" />
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <button class="btn" type=submit>Añadir</button>
+    </div>
+  </div>
 </form>
-
-
 {% endblock %}

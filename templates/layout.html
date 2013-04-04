@@ -1,24 +1,48 @@
 <!doctype html>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Facturas de Sara</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}" media="screen"/>
+<script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
 <script>window.jQuery || document.write('<script src="{{
   url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
 <script type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 </script>
-<div class=page>
-  <h1>Facturas</h1>
-  <div class=metanav>
-  {% if not session.logged_in %}
-    <a href="{{ url_for('login') }}">Inicia sesion</a>
-  {% else %}
-    <a href="{{ url_for('logout') }}">Desconectar</a>
+<body>
+{% if not session.logged_in %}
+    <div class="container">
+      <div class="span10">
+	<h2 class="site-header">Facturación</h2>
+      </div>
+    </div>
+{% else %}
+    <div class="container-fluid">
+      <div class="span2">
+	<ul class="nav nav-tabs nav-stacked">
+	<li><a href="{{ url_for('index') }}">Crear Factura</a></li>
+	<li><a href="{{ url_for('listar_facturas') }}">Ver Facturas</a></li>
+	<li><a href="{{ url_for('logout') }}">Desconectar</a></li>
+	</ul>
+      </div>
+      <div class="span10">
+	<h2 class="site-header">Facturación</h2>
+      </div>
+      <div class="span10">
+{% endif %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category,message in messages %}
+<div class="alert {{category}}">{{ message | safe }}<a href="#" class="close" data-dismiss="alert">&times;</a></div>
+    {% endfor %}
   {% endif %}
-  </div>
-  {% for message in get_flashed_messages() %}
-    <div class=flash>{{ message | safe }}</div>
-  {% endfor %}
-  {% block body %}{% endblock %}
-</div>
+{% endwith %}
+    {% block body %}
+    {% endblock %}
+    {% if not session.logged_in %}
+	</div>
+    {% endif %}
+    </div>
+
+</body>

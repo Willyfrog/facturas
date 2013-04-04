@@ -49,15 +49,15 @@ def login():
     if request.method == 'POST':
         if valid_login(request.form['username'], request.form['password']):
             session['logged_in'] = True
-            flash('Bienvenido %s' % request.form['username'])
+            flash('Bienvenido %s' % request.form['username'], "alert-success")
         else:
-            flash("Usuario y password incorrectos")
+            flash("Usuario y password incorrectos", "alert-error")
     return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
-    flash("Sesion terminada. Hasta pronto!")
+    flash("Sesion terminada. Hasta pronto!", "alert-info")
     return redirect(url_for('index'))
 
 
@@ -72,7 +72,7 @@ def index():
     fnum = 0
     if session.get("logged_in", False)==True:
         fnum = get_last_num()
-        return render_template('index.html', fnum=fnum)
+        return render_template('index.html', fnum=fnum, fdate=datetime.now().strftime("%d-%m-%Y %H:%M"))
     else:
         return render_template('login.html')
 
@@ -81,14 +81,14 @@ def crear_factura():
     if not session.get('logged_in'):
         abort(401)
     numero = int(request.form['num']) or get_last_num()
-    fecha = datetime(request.form['fecha'])
+    fecha = datetime.strptime(request.form['fecha'], "%d-%m-%Y %H:%M")
     importe = float(request.form['importe'])
     factura = {
         '_id': numero,
         'fecha': fecha,
         'importe': importe,
                }
-    flash('Ingresada factura #' % numero)
+    flash('Ingresada factura #' % numero, "alert-success")
     g.db.facturas.insert(factura)
     return redirect(url_for('index'))
 
